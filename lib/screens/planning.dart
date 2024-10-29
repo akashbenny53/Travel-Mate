@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/database/trip.dart';
 import 'package:travel_app/datamodel/tripmodel.dart';
 import 'package:travel_app/screens/hiddendrawer.dart';
+import 'package:travel_app/widgets/text._style.dart';
 
 class JourneyPlan extends StatefulWidget {
   const JourneyPlan({super.key});
@@ -46,25 +48,22 @@ class _JourneyPlanState extends State<JourneyPlan> {
                   padding: EdgeInsets.only(
                     top: MediaQuery.sizeOf(context).height * .02,
                   ),
-                  child: const Center(
-                    child: Text(
-                      'Planning of a new journey',
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 28,
-                      ),
+                  child: Center(
+                    child: CustomText(
+                      text: 'Planning of a new journey',
+                      fontsize: 28,
+                      fontweight: FontWeight.w500,
                     ),
                   ),
                 ),
-                const Center(
+                Center(
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Create a comprehensive itinerary and chart your forthcoming travel arrangements.',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomText(
+                      text:
+                          'Create a comprehensive itinerary and chart your forthcoming travel arrangements.',
+                      fontsize: 16,
+                      fontweight: FontWeight.w400,
                     ),
                   ),
                 ),
@@ -99,148 +98,412 @@ class _JourneyPlanState extends State<JourneyPlan> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-                  child: TextFormField(
-                    style: const TextStyle(color: Colors.black),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Place cannot be empty';
-                      }
-                      return null;
-                    },
-                    controller: placecontroller,
-                    decoration: InputDecoration(
-                      hintText: 'Where to ?',
-                      hintStyle: const TextStyle(color: Colors.black),
-                      filled: true,
-                      fillColor: Colors.green.shade600,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide.none,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: 'Place',
+                        fontsize: 18,
+                        fontweight: FontWeight.w500,
                       ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-                  child: TextFormField(
-                    style: const TextStyle(color: Colors.black),
-                    controller: namecontroller,
-                    decoration: InputDecoration(
-                      hintText: 'Add your Companion',
-                      hintStyle: const TextStyle(color: Colors.black),
-                      filled: true,
-                      fillColor: Colors.green.shade600,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide.none,
+                      const SizedBox(
+                        height: 3,
                       ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-                  child: TextFormField(
-                    style: const TextStyle(color: Colors.black),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Budget cannot be empty';
-                      }
-                      return null;
-                    },
-                    controller: budgetcontroller,
-                    decoration: InputDecoration(
-                      hintText: 'Budget',
-                      hintStyle: const TextStyle(color: Colors.black),
-                      filled: true,
-                      prefix: const Text('₹'),
-                      fillColor: Colors.green.shade600,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-                  child: TextFormField(
-                    style: const TextStyle(color: Colors.black),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Start date cannot be empty';
-                      }
-                      return null;
-                    },
-                    controller: startDateController,
-                    decoration: InputDecoration(
-                      prefixIcon: GestureDetector(
-                        child: const Icon(
-                          Icons.calendar_month_outlined,
+                      TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
+                        cursorColor: Colors.green.shade600,
+                        style: GoogleFonts.lato(
                           color: Colors.black,
                         ),
-                        onTap: () async {
-                          final DateTimeRange? picked =
-                              await showDateRangePicker(
-                            context: context,
-                            firstDate: DateTime(2023),
-                            lastDate: DateTime(2025),
-                          );
-                          if (picked != null) {
-                            dateTimeRange = picked;
-                            setState(
-                              () {
-                                startDateController.text =
-                                    DateFormat('dd-MM-yyyy')
-                                        .format(picked.start);
-                                endDateController.text =
-                                    DateFormat('dd-MM-yyyy').format(picked.end);
-                              },
-                            );
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Place cannot be empty';
                           }
+                          return null;
                         },
+                        controller: placecontroller,
+                        decoration: InputDecoration(
+                          hintText: 'Where to ?',
+                          hintStyle: GoogleFonts.lato(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
                       ),
-                      filled: true,
-                      fillColor: Colors.green.shade600,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-                  child: TextFormField(
-                    style: const TextStyle(color: Colors.black),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'end date cannot be empty';
-                      }
-
-                      return null;
-                    },
-                    controller: endDateController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.calendar_month_outlined,
-                        color: Colors.black,
-                      ),
-                      filled: true,
-                      fillColor: Colors.green.shade600,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: 'Companion',
+                        fontsize: 18,
+                        fontweight: FontWeight.w500,
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
+                        cursorColor: Colors.green.shade600,
+                        style: GoogleFonts.lato(
+                          color: Colors.black,
+                        ),
+                        controller: namecontroller,
+                        decoration: InputDecoration(
+                          hintText: 'Add your Companion',
+                          hintStyle: GoogleFonts.lato(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: 'Budget',
+                        fontsize: 18,
+                        fontweight: FontWeight.w500,
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      TextFormField(
+                        cursorColor: Colors.green.shade600,
+                        style: GoogleFonts.lato(
+                          color: Colors.black,
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Budget cannot be empty';
+                          }
+                          return null;
+                        },
+                        controller: budgetcontroller,
+                        decoration: InputDecoration(
+                          hintText: 'Budget',
+                          hintStyle: GoogleFonts.lato(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          prefix: Text(
+                            '₹',
+                            style: GoogleFonts.lato(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 19,
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: 'Start Date',
+                        fontsize: 18,
+                        fontweight: FontWeight.w500,
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      TextFormField(
+                        cursorColor: Colors.green.shade600,
+                        style: GoogleFonts.lato(
+                          color: Colors.black,
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Start date cannot be empty';
+                          }
+                          return null;
+                        },
+                        controller: startDateController,
+                        decoration: InputDecoration(
+                          prefixIcon: GestureDetector(
+                            child: const Icon(
+                              Icons.calendar_month_outlined,
+                              color: Colors.black,
+                            ),
+                            onTap: () async {
+                              final DateTimeRange? picked =
+                                  await showDateRangePicker(
+                                context: context,
+                                firstDate: DateTime(2023),
+                                lastDate: DateTime(2025),
+                              );
+                              if (picked != null) {
+                                dateTimeRange = picked;
+                                setState(
+                                  () {
+                                    startDateController.text =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(picked.start);
+                                    endDateController.text =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(picked.end);
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: 'End Date',
+                        fontsize: 18,
+                        fontweight: FontWeight.w500,
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      TextFormField(
+                        cursorColor: Colors.green.shade600,
+                        style: GoogleFonts.lato(
+                          color: Colors.black,
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'End date cannot be empty';
+                          }
+
+                          return null;
+                        },
+                        controller: endDateController,
+                        decoration: InputDecoration(
+                          hintText: 'End Date',
+                          hintStyle: GoogleFonts.lato(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          prefixIcon: GestureDetector(
+                            child: const Icon(
+                              Icons.calendar_month_outlined,
+                              color: Colors.black,
+                            ),
+                            onTap: () async {
+                              final DateTimeRange? picked =
+                                  await showDateRangePicker(
+                                context: context,
+                                firstDate: DateTime(2023),
+                                lastDate: DateTime(2025),
+                              );
+                              if (picked != null) {
+                                dateTimeRange = picked;
+                                setState(
+                                  () {
+                                    startDateController.text =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(picked.start);
+                                    endDateController.text =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(picked.end);
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 20,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: Colors.green.shade600,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Center(
-                  child: TextButton(
+                  child: ElevatedButton(
                     onPressed: () async {
                       if (!formkey.currentState!.validate()) {
                       } else {
@@ -297,24 +560,31 @@ class _JourneyPlanState extends State<JourneyPlan> {
                         );
                       }
                     },
-                    style: const ButtonStyle(
-                      minimumSize: MaterialStatePropertyAll<Size>(
-                        Size(100, 40),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(150, 50),
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
                       ),
-                      backgroundColor:
-                          MaterialStatePropertyAll<Color>(Colors.black),
-                      foregroundColor:
-                          MaterialStatePropertyAll<Color>(Colors.white),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 5,
                     ),
                     child: const Text(
-                      'Next',
+                      'Submit',
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w400,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 15,
+                )
               ],
             ),
           ),

@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/database/user.dart';
 import 'package:travel_app/screens/hiddendrawer.dart';
@@ -22,8 +25,8 @@ class _SplaShState extends State<SplaSh> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset(
-          'assets/Animation - 1727856139887.gif',
+        child: LottieBuilder.asset(
+          "assets/animation/mini-animation.json",
         ),
       ),
     );
@@ -31,6 +34,12 @@ class _SplaShState extends State<SplaSh> {
 
   Future getsharedpreference(BuildContext context) async {
     final preference = await SharedPreferences.getInstance();
+    await precacheImage(
+        const AssetImage('assets/new_expense_image.jpg'), context);
+    await precacheImage(
+        const AssetImage('assets/new_journal_image.jpg'), context);
+    await precacheImage(const AssetImage('assets/new_todo_image.jpg'), context);
+
     final value = preference.getString('My Value');
 
     await Future.delayed(
@@ -38,13 +47,11 @@ class _SplaShState extends State<SplaSh> {
     );
     if (value == 'true') {
       await UserDb().getUser();
-      // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HiddenDrawer()),
       );
     } else {
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const StartPage(),

@@ -1,15 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/datamodel/todolistmodel.dart';
 import 'package:travel_app/datamodel/tripmodel.dart';
-
 import '../database/trip.dart';
 
 class CreateTodo extends StatefulWidget {
   final TripModel tripModel;
+
   const CreateTodo({super.key, required this.tripModel});
 
   @override
@@ -17,203 +15,246 @@ class CreateTodo extends StatefulWidget {
 }
 
 class _CreateTodoState extends State<CreateTodo> {
-  TextEditingController titlecontroller = TextEditingController();
-  Map<int, String> todos = {};
-  late Widget textField;
-  List<Widget> todosTextfield = [];
-  FocusNode focusNode = FocusNode();
-  TextEditingController todolistcontroller = TextEditingController();
+  // Controllers and FocusNodes
+  final TextEditingController titleController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
 
+  // State variables
+  Map<int, String> todos = {};
   late TripModel tripModel;
+  late Widget initialTodoField;
+  List<Widget> todoTextFields = [];
+
   @override
   void initState() {
-    tripModel = widget.tripModel;
-    textField = todo(FocusNode(), todosTextfield, todos);
-    todosTextfield.add(textField);
     super.initState();
+    tripModel = widget.tripModel;
+    initialTodoField = _buildTodoField(focusNode, todoTextFields, todos);
+    todoTextFields.add(initialTodoField);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.green.shade600,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context, tripModel);
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
-          title: Text(
-            'Create Todo List',
-            style: GoogleFonts.lato(
-              fontSize: 28,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                // ignore: unused_local_variable
-                if (todos.values.isNotEmpty &&
-                    todos.values.first.trim().isNotEmpty) {
-                  TodoListModel todoListModel = TodoListModel(
-                    title: titlecontroller.text,
-                    todolist: todos.values.toList(),
-                  );
+        appBar: _buildAppBar(context),
+        body: _buildBody(),
+      ),
+    );
+  }
 
-                  tripModel.todolist ??= [];
-                  tripModel.todolist?.add(todoListModel);
-                  await TripDb().editUser(tripModel.key, tripModel).then(
-                    (value) {
-                      var snackbar = SnackBar(
-                        content: Row(
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.green.shade600,
-                              size: 24,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Todo List saved successfully!',
-                                style: GoogleFonts.lato(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        elevation: 15,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        margin: const EdgeInsets.all(30),
-                      );
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      });
-                      Navigator.of(context).pop(tripModel);
-                    },
-                  );
-                } else {
-                  var snackbar = SnackBar(
-                    content: Row(
-                      children: [
-                        const Icon(
-                          Icons.not_interested_sharp,
-                          color: Colors.red,
-                          size: 24,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Please write.....',
-                            style: GoogleFonts.lato(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    elevation: 15,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.all(30),
-                  );
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.check,
-              ),
-            ),
-          ],
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: Colors.green.shade600,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => Navigator.pop(context, tripModel),
+      ),
+      title: Text(
+        'Create Todo List',
+        style: GoogleFonts.lato(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: titlecontroller,
-                      autofocus: true,
-                      focusNode: focusNode,
-                      minLines: 1,
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        hintText: 'Title',
-                        hintStyle: GoogleFonts.lato(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              ...todosTextfield
-            ],
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(
+            Icons.check,
           ),
+          onPressed: _saveTodoList,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 20.0,
+        ),
+        child: Column(
+          children: [
+            _buildTitleInputField(),
+            ...todoTextFields,
+          ],
         ),
       ),
     );
   }
 
-  Widget todo(FocusNode focusNode, List<Widget> todosTextfield,
-      Map<int, String> todos) {
-    int index = todos.length + 1;
+  // Builds the title input field
+  Widget _buildTitleInputField() {
     return Row(
       children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(
-            Icons.circle,
-            size: 10,
-          ),
-        ),
         Expanded(
-          child: TextField(
-            keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.done,
-            onChanged: (value) {
-              todos[index] = value;
-            },
-            onSubmitted: (value) {
-              log('e');
-              todosTextfield.add(
-                todo(FocusNode(), todosTextfield, todos),
-              );
-
-              setState(() {});
-            },
-            autofocus: true,
-            decoration: const InputDecoration(
-              hintText: 'To do List',
-              border: InputBorder.none,
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                10,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
+              child: TextField(
+                controller: titleController,
+                focusNode: focusNode,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  labelText: 'Todo List Title',
+                  labelStyle: GoogleFonts.lato(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green.shade900,
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  // Builds each individual to-do input field
+  Widget _buildTodoField(FocusNode focusNode, List<Widget> todoTextFields,
+      Map<int, String> todos) {
+    int index = todos.length + 1;
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: 16.0,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+      ),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              Icons.circle,
+              size: 14,
+              color: Colors.green.shade600,
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.done,
+              onChanged: (value) => todos[index] = value,
+              onSubmitted: (_) => setState(
+                () => todoTextFields.add(
+                  _buildTodoField(FocusNode(), todoTextFields, todos),
+                ),
+              ),
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: 'Enter a task',
+                hintStyle: GoogleFonts.lato(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 8.0,
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.delete_outline,
+              color: Colors.black,
+            ),
+            onPressed: () => setState(() {
+              todos.remove(index);
+              todoTextFields.removeAt(index - 1);
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Handles saving the to-do list and displaying a success/failure message
+  Future<void> _saveTodoList() async {
+    if (todos.isNotEmpty && todos.values.first.trim().isNotEmpty) {
+      TodoListModel todoListModel = TodoListModel(
+          title: titleController.text, todolist: todos.values.toList());
+
+      tripModel.todolist ??= [];
+      tripModel.todolist?.add(todoListModel);
+
+      await TripDb().editUser(tripModel.key, tripModel).then((_) {
+        _showSnackBar(
+          context,
+          'Todo List saved successfully!',
+          Icons.check_circle_outline,
+          Colors.green.shade600,
+        );
+        Navigator.of(context).pop(tripModel);
+      });
+    } else {
+      _showSnackBar(
+        context,
+        'Please write.....',
+        Icons.not_interested_sharp,
+        Colors.red,
+      );
+    }
+  }
+
+  // Utility function for showing SnackBars
+  void _showSnackBar(
+      BuildContext context, String message, IconData icon, Color iconColor) {
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          Icon(
+            icon,
+            color: iconColor,
+            size: 24,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message,
+              style: GoogleFonts.lato(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+      elevation: 15,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          20.0,
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.all(
+        30,
+      ),
+    );
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ScaffoldMessenger.of(context).showSnackBar(snackBar),
     );
   }
 
@@ -222,7 +263,7 @@ class _CreateTodoState extends State<CreateTodo> {
     super.debugFillProperties(properties);
     properties.add(
       DiagnosticsProperty<TextEditingController>(
-          'titlecontroller', titlecontroller),
+          'titleController', titleController),
     );
   }
 }

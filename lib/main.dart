@@ -29,18 +29,20 @@ class TravelMate extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Travel Mate',
       theme: ThemeData(
+        primaryColor: Colors.green.shade300,
         textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.green.shade600,
           selectionColor: Colors.green.shade300,
           selectionHandleColor: Colors.green.shade600,
         ),
-        // brightness: Brightness.light,
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.green.shade800,
+          ),
+        ),
         useMaterial3: true,
       ),
       home: const SplaSh(),
-      // darkTheme: ThemeData(
-      //   brightness: Brightness.dark,
-      // ),
-      // themeMode: ThemeMode.system,
     );
   }
 }

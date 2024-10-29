@@ -18,15 +18,21 @@ class JournalModelAdapter extends TypeAdapter<JournalModel> {
     };
     return JournalModel(
       content: fields[0] as String,
+      imagePaths: (fields[1] as List?)?.cast<String>(),
+      date: fields[2] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, JournalModel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.content);
+      ..write(obj.content)
+      ..writeByte(1)
+      ..write(obj.imagePaths)
+      ..writeByte(2)
+      ..write(obj.date);
   }
 
   @override

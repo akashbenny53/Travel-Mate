@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/screens/planning.dart';
 import 'package:travel_app/screens/secondpage.dart';
+import 'package:travel_app/widgets/text._style.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -12,20 +13,17 @@ class StartPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(30, 70, 140, 30),
-              child: Text(
-                'We create the trips, you love most',
-                style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.black,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w500),
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.sizeOf(context).height * .05,
+                left: MediaQuery.sizeOf(context).width * .05,
+              ),
+              child: CustomText(
+                text: 'We create the trips, you love most',
+                fontsize: 28,
+                fontweight: FontWeight.w500,
               ),
             ),
-            // const SizedBox(
-            //   height: 0,
-            // ),
             const Image(
               image: AssetImage(
                 'assets/forest.jpg',
@@ -38,26 +36,30 @@ class StartPage extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: MediaQuery.sizeOf(context).width * .1,
               ),
-              child: TextButton(
+              child: ElevatedButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const SecPage(),
                   ),
                 ),
-                style: const ButtonStyle(
-                  minimumSize: MaterialStatePropertyAll<Size>(
-                    Size(120, 50),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(150, 50),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
                   ),
-                  backgroundColor:
-                      MaterialStatePropertyAll<Color>(Colors.black),
-                  foregroundColor:
-                      MaterialStatePropertyAll<Color>(Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 5,
                 ),
                 child: const Text(
                   'Next',
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -79,9 +81,6 @@ class StartPage extends StatelessWidget {
               ),
             );
           },
-          // backgroundColor: Colors.black,
-          // foregroundColor: Colors.black,
-          // child: const Icon(Icons.navigate_next_outlined),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

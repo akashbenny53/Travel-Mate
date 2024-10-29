@@ -72,6 +72,7 @@ class _UserDetailsState extends State<UserDetails> {
             Padding(
               padding: const EdgeInsets.all(30.0),
               child: TextFormField(
+                textCapitalization: TextCapitalization.sentences,
                 autovalidateMode: AutovalidateMode.always,
                 cursorColor: Colors.green.shade600,
                 validator: (value) {
@@ -99,10 +100,24 @@ class _UserDetailsState extends State<UserDetails> {
                       width: 3.0,
                     ),
                   ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                      width: 2.0,
+                    ),
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(
                       color: Colors.green.shade600,
+                      width: 2.0,
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
                       width: 2.0,
                     ),
                   ),

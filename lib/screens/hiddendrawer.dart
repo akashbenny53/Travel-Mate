@@ -1,5 +1,4 @@
 // ignore_for_file: duplicate_import
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
@@ -14,48 +13,51 @@ class HiddenDrawer extends StatefulWidget {
 }
 
 class _HiddenDrawerState extends State<HiddenDrawer> {
-  // TextEditingController usercontroller = TextEditingController();
-  // String profile = '';
+  late List<ScreenHiddenDrawer> _pages;
+  final ValueNotifier<String> selected = ValueNotifier('Journey');
 
-  List<ScreenHiddenDrawer> _pages = [];
-  ValueNotifier<String> selected = ValueNotifier('Journey');
-  final myTextStyle = GoogleFonts.lato(
+  final TextStyle myTextStyle = GoogleFonts.lato(
     fontWeight: FontWeight.w500,
     fontSize: 17,
     fontStyle: FontStyle.italic,
   );
-  final theTextStyle = GoogleFonts.lato(
+  final TextStyle theTextStyle = GoogleFonts.lato(
     fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.normal,
     fontSize: 30,
+    fontStyle: FontStyle.normal,
   );
+
   @override
   void initState() {
     super.initState();
+    _initializePages();
+  }
+
+  void _initializePages() {
     _pages = [
-      ScreenHiddenDrawer(
-        ItemHiddenMenu(
-            name: 'Journey',
-            baseStyle: myTextStyle,
-            selectedStyle: theTextStyle,
-            colorLineSelected: Colors.green.shade600,
-            onTap: () {
-              selected.value = 'Journey';
-            }),
-        const Home(),
+      _buildScreenHiddenDrawer(
+        name: 'Journey',
+        page: const Home(),
       ),
-      ScreenHiddenDrawer(
-        ItemHiddenMenu(
-            name: 'User',
-            baseStyle: myTextStyle,
-            selectedStyle: theTextStyle,
-            colorLineSelected: Colors.green.shade600,
-            onTap: () {
-              selected.value = 'User';
-            }),
-        const UserDetails(),
-      )
+      _buildScreenHiddenDrawer(
+        name: 'User',
+        page: const UserDetails(),
+      ),
     ];
+  }
+
+  ScreenHiddenDrawer _buildScreenHiddenDrawer(
+      {required String name, required Widget page}) {
+    return ScreenHiddenDrawer(
+      ItemHiddenMenu(
+        name: name,
+        baseStyle: myTextStyle,
+        selectedStyle: theTextStyle,
+        colorLineSelected: Colors.green.shade600,
+        onTap: () => selected.value = name,
+      ),
+      page,
+    );
   }
 
   @override

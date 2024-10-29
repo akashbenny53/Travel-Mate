@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/screens/planning.dart';
+import 'package:travel_app/widgets/text._style.dart';
 
 class ThiPage extends StatelessWidget {
   const ThiPage({super.key});
@@ -11,23 +12,20 @@ class ThiPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(30, 70, 120, 30),
-              child: Text(
-                'Keep your travel memories alive',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 28,
-                    color: Colors.black),
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.sizeOf(context).height * .05,
+                left: MediaQuery.sizeOf(context).width * .05,
               ),
-            ),
-            const SizedBox(
-              height: 40,
+              child: CustomText(
+                text: 'Keep your travel memories alive',
+                fontsize: 28,
+                fontweight: FontWeight.w500,
+              ),
             ),
             const Image(
               image: AssetImage(
-                'assets/earthrevov.jpg',
+                'assets/travel_around.jpg',
               ),
             ),
             const SizedBox(
@@ -37,26 +35,30 @@ class ThiPage extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: MediaQuery.sizeOf(context).width * .1,
               ),
-              child: TextButton(
+              child: ElevatedButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const JourneyPlan(),
                   ),
                 ),
-                style: const ButtonStyle(
-                  minimumSize: MaterialStatePropertyAll<Size>(
-                    Size(120, 50),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(150, 50),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
                   ),
-                  backgroundColor:
-                      MaterialStatePropertyAll<Color>(Colors.black),
-                  foregroundColor:
-                      MaterialStatePropertyAll<Color>(Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 5,
                 ),
                 child: const Text(
                   'Next',
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

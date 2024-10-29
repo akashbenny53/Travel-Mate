@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:travel_app/database/trip.dart';
 import 'package:travel_app/datamodel/tripmodel.dart';
 import 'package:travel_app/screens/journey.dart';
@@ -13,8 +14,8 @@ class Home extends StatefulWidget {
 
   const Home({
     this.trip,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<Home> createState() => _HomeState();
@@ -55,7 +56,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   (3.0),
                 ),
                 child: AppBar(
-                  // title: Text('TravelMate'),
                   centerTitle: true,
                   backgroundColor: Colors.green.shade600,
                   bottom: TabBar(
@@ -86,6 +86,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextField(
+                    textCapitalization: TextCapitalization.sentences,
                     cursorColor: Colors.green.shade600,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.search),
@@ -132,10 +133,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               filter(searchQuery, tripnotifier.value);
 
                           return filteredList.isEmpty
-                              ? SizedBox(
-                                  child: Image.asset(
-                                    'assets/cancelled-flight-illustration-concept_23-2148559796.jpg',
-                                  ),
+                              ? LottieBuilder.asset(
+                                  'assets/animation/man-travelling.json',
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
@@ -170,7 +169,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                           child: Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: Container(
-                                              height: 280,
+                                              height: 250,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -178,7 +177,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                   fit: BoxFit.fitWidth,
                                                   image: trip.image == ''
                                                       ? const AssetImage(
-                                                          'assets/addtripbbl.jpeg',
+                                                          'assets/trip-non.jpg',
                                                         ) as ImageProvider
                                                       : FileImage(
                                                           File(
@@ -188,9 +187,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 ),
                                               ),
                                               child: Container(
-                                                height: 280,
-                                                decoration: const BoxDecoration(
-                                                  gradient: LinearGradient(
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  gradient:
+                                                      const LinearGradient(
                                                     begin: Alignment.topCenter,
                                                     end: Alignment.bottomCenter,
                                                     colors: [
@@ -202,13 +204,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 ),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(
-                                                      20.0),
+                                                    15.0,
+                                                  ),
                                                   child: Align(
                                                     alignment:
                                                         Alignment.bottomLeft,
                                                     child: Column(
                                                       mainAxisSize:
                                                           MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
                                                       children: [
                                                         ListTile(
                                                           title: Text(
@@ -220,10 +226,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                                   Colors.white,
                                                             ),
                                                           ),
-                                                          trailing:
-                                                              const SizedBox(
-                                                            width: 100,
-                                                          ),
                                                         ),
                                                         Row(
                                                           mainAxisAlignment:
@@ -234,7 +236,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                               width: 14,
                                                             ),
                                                             Text(
-                                                              'Expense:₹',
+                                                              'Expense: ₹',
                                                               style: GoogleFonts
                                                                   .lato(
                                                                 fontSize: 23,
@@ -271,7 +273,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                               child: AnimatedOpacity(
                                                 curve: Curves.ease,
                                                 duration: const Duration(
-                                                    milliseconds: 800),
+                                                  milliseconds: 800,
+                                                ),
                                                 opacity: value ? 1 : 0,
                                                 child: Container(
                                                   color: const Color.fromARGB(
@@ -281,7 +284,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                     221,
                                                   ),
                                                   width: double.infinity,
-                                                  height: 320,
+                                                  height: 280,
                                                   child: Align(
                                                     alignment:
                                                         AlignmentDirectional
@@ -435,10 +438,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         builder: (context, trips, _) {
                           ongoingtrips = filter(searchQuery, ongoingtrips);
                           return ongoingtrips.isEmpty
-                              ? SizedBox(
-                                  child: Image.asset(
-                                    'assets/cancelled-flight-illustration-concept_23-2148559796.jpg',
-                                  ),
+                              ? LottieBuilder.asset(
+                                  'assets/animation/man-travelling.json',
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
@@ -473,7 +474,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                           child: Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: Container(
-                                              height: 280,
+                                              height: 250,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -481,7 +482,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                   fit: BoxFit.fitWidth,
                                                   image: trip.image == ''
                                                       ? const AssetImage(
-                                                          'assets/addtripbbl.jpeg',
+                                                          'assets/trip-non.jpg',
                                                         ) as ImageProvider
                                                       : FileImage(
                                                           File(
@@ -491,9 +492,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 ),
                                               ),
                                               child: Container(
-                                                height: 280,
-                                                decoration: const BoxDecoration(
-                                                  gradient: LinearGradient(
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  gradient:
+                                                      const LinearGradient(
                                                     begin: Alignment.topCenter,
                                                     end: Alignment.bottomCenter,
                                                     colors: [
@@ -505,7 +509,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 ),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(
-                                                      20.0),
+                                                    20.0,
+                                                  ),
                                                   child: Align(
                                                     alignment:
                                                         Alignment.bottomLeft,
@@ -585,7 +590,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                     221,
                                                   ),
                                                   width: double.infinity,
-                                                  height: 320,
+                                                  height: 280,
                                                   child: Align(
                                                     alignment:
                                                         AlignmentDirectional
@@ -601,7 +606,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                       ),
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              10),
+                                                        10,
+                                                      ),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
@@ -740,10 +746,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         builder: (context, trips, _) {
                           completedtrips = filter(searchQuery, completedtrips);
                           return completedtrips.isEmpty
-                              ? SizedBox(
-                                  child: Image.asset(
-                                    'assets/cancelled-flight-illustration-concept_23-2148559796.jpg',
-                                  ),
+                              ? LottieBuilder.asset(
+                                  'assets/animation/man-travelling.json',
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
@@ -778,7 +782,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                           child: Padding(
                                             padding: const EdgeInsets.all(20.0),
                                             child: Container(
-                                              height: 280,
+                                              height: 250,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -786,7 +790,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                   fit: BoxFit.fitWidth,
                                                   image: trip.image == ''
                                                       ? const AssetImage(
-                                                          'assets/addtripbbl.jpeg',
+                                                          'assets/trip-non.jpg',
                                                         ) as ImageProvider
                                                       : FileImage(
                                                           File(
@@ -796,9 +800,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 ),
                                               ),
                                               child: Container(
-                                                height: 280,
-                                                decoration: const BoxDecoration(
-                                                  gradient: LinearGradient(
+                                                height: 250,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  gradient:
+                                                      const LinearGradient(
                                                     begin: Alignment.topCenter,
                                                     end: Alignment.bottomCenter,
                                                     colors: [
@@ -810,7 +817,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 ),
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(
-                                                      20.0),
+                                                    20.0,
+                                                  ),
                                                   child: Align(
                                                     alignment:
                                                         Alignment.bottomLeft,
@@ -890,7 +898,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                     221,
                                                   ),
                                                   width: double.infinity,
-                                                  height: 320,
+                                                  height: 280,
                                                   child: Align(
                                                     alignment:
                                                         AlignmentDirectional
@@ -906,7 +914,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                       ),
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              10),
+                                                        10,
+                                                      ),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.min,

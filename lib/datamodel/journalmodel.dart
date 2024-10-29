@@ -6,5 +6,15 @@ class JournalModel {
   @HiveField(0)
   String content;
 
-  JournalModel({required this.content});
+  @HiveField(1)
+  List<String>? imagePaths;
+
+  @HiveField(2)
+  DateTime date;
+
+  JournalModel({
+    required this.content,
+    this.imagePaths,
+    required this.date,
+  });
 }
